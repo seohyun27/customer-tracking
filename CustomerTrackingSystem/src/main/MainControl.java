@@ -52,7 +52,7 @@ public class MainControl extends JFrame {
         setVisible(true);
     }
 
-    // 비밀번호 입력 화면 패널 생성 메소드
+    // 비밀번호 초기화 화면 패널 생성 메소드
     public JPanel createPasswordPanel() {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBackground(Color.WHITE);
