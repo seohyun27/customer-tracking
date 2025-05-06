@@ -11,8 +11,7 @@ public class ManagerMain extends JFrame {
     private static final String M_MAIN_PANEL = "매니저 메인 화면 패널"; //빈 화면
     private static final String ADD_OWNER_PANEL = "점주 추가 패널";
     private static final String DEL_OWNER_PANEL = "점주 삭제 패널";
-
-
+    private static final String LIST_OWNER_PANEL = "점주 리스트 패널";
 
     public ManagerMain() { //생성자
         setTitle("매니저");
@@ -34,6 +33,10 @@ public class ManagerMain extends JFrame {
         JPanel delOwnerPanel = createDelPanel();
         mainPanel.add(delOwnerPanel, DEL_OWNER_PANEL);
 
+        //점주 리스트 패널 생성 및 추가
+        JPanel listOwnerPanel = createListPanel();
+        mainPanel.add(listOwnerPanel, LIST_OWNER_PANEL);
+
         // 메뉴바 생성
         JMenuBar menuBar = new JMenuBar();
 
@@ -47,11 +50,12 @@ public class ManagerMain extends JFrame {
         JMenu stats = new JMenu("통계 보기");
 
         //세 번째 메뉴
-        JMenu logout = new JMenu("통계 보기");
+        JMenu logout = new JMenu("로그아웃");
 
         // 메뉴 아이템 클릭 이벤트 추가
         ownerAdd.addActionListener(e -> cardLayout.show(mainPanel, ADD_OWNER_PANEL));
         ownerDel.addActionListener(e -> cardLayout.show(mainPanel, DEL_OWNER_PANEL));
+        ownerList.addActionListener(e -> cardLayout.show(mainPanel, LIST_OWNER_PANEL));
 
         // 메뉴에 항목 추가
         ownerMenu.add(ownerAdd);
@@ -209,6 +213,35 @@ public class ManagerMain extends JFrame {
         return panel;
     }
 
+    //점주 리스트 패널을 생성하는 메소드
+    public JPanel createListPanel() {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBackground(Color.WHITE);
+
+        // 상단 설명 라벨
+        JLabel titleLabel = new JLabel("등록된 점주 리스트", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
+        titleLabel.setBorder(BorderFactory.createEmptyBorder(30, 0, 20, 0));
+        panel.add(titleLabel, BorderLayout.NORTH);
+
+        // 중앙 패널에 스크롤이 가능한 리스트를 추가
+        String[] ownerNames = {"Owner1", "Owner2", "Owner3", "Owner4", "Owner5", "Owner6"};
+        JList<String> ownerList = new JList<>(ownerNames);
+        ownerList.setFont(new Font("맑은 고딕", Font.PLAIN, 16));
+        ownerList.setEnabled(false);  // 읽기 전용
+
+        JScrollPane scrollPane = new JScrollPane(ownerList);
+        scrollPane.setPreferredSize(new Dimension(250, 200));
+
+        // FlowLayout을 사용하는 패널에 스크롤 페인지를 감싸서 중앙으로 배치
+        JPanel centerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        centerPanel.setBackground(Color.WHITE);
+        centerPanel.add(scrollPane);
+
+        panel.add(centerPanel, BorderLayout.CENTER);
+
+        return panel;
+    }
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
