@@ -111,54 +111,102 @@ public class OwnerMain extends JFrame {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
 
-        // 아이디 라벨 및 입력창
-        JLabel idLabel = new JLabel("아이디");
-        idLabel.setOpaque(true);
-        idLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 16));
-        idLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        idLabel.setPreferredSize(new Dimension(80, 30));
+        String[] options = { " ", "option1" };
 
-        JTextField idField = new JTextField();
-        idField.setPreferredSize(new Dimension(250, 30));
-        idField.setBackground(new Color(227, 232, 239));
+        // 성별 콤보박스
+        JLabel genLabel = new JLabel("성별");
+        genLabel.setOpaque(true);
+        genLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 16));
+        genLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        genLabel.setPreferredSize(new Dimension(120, 30));
+        JComboBox<String> genComboBox = new JComboBox<>(new String[]{" ", "남성", "여성"});
+        genComboBox.setPreferredSize(new Dimension(250, 30));
+        genComboBox.setBackground(new Color(227, 232, 239));
 
-        // 비밀번호 라벨 및 입력창
-        JLabel passwordLabel = new JLabel("비밀번호");
-        passwordLabel.setOpaque(true);
-        passwordLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 16));
-        passwordLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        passwordLabel.setPreferredSize(new Dimension(80, 30));
+        // 나이 콤보박스
+        JLabel ageLabel = new JLabel("나이");
+        ageLabel.setOpaque(true);
+        ageLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 16));
+        ageLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        ageLabel.setPreferredSize(new Dimension(120, 30));
+        JComboBox<String> ageComboBox = new JComboBox<>(options);
+        ageComboBox.setPreferredSize(new Dimension(250, 30));
+        ageComboBox.setBackground(new Color(227, 232, 239));
 
-        JPasswordField passwordField = new JPasswordField();
-        passwordField.setPreferredSize(new Dimension(250, 30));
-        passwordField.setBackground(new Color(227, 232, 239));
+        // 입장 시간대 콤보박스
+        JLabel entryTimeLabel = new JLabel("입장 시간대");
+        entryTimeLabel.setOpaque(true);
+        entryTimeLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 16));
+        entryTimeLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        entryTimeLabel.setPreferredSize(new Dimension(120, 30));
+        JComboBox<String> entryTimeComboBox = new JComboBox<>(options);
+        entryTimeComboBox.setPreferredSize(new Dimension(250, 30));
+        entryTimeComboBox.setBackground(new Color(227, 232, 239));
 
-        // 아이디 필드 추가 (첫 번째 행)
+        // 머문 시간 콤보박스
+        JLabel stayTimeLabel = new JLabel("머문 시간");
+        stayTimeLabel.setOpaque(true);
+        stayTimeLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 16));
+        stayTimeLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        stayTimeLabel.setPreferredSize(new Dimension(120, 30));
+        JComboBox<String> stayTimeComboBox = new JComboBox<>(options);
+        stayTimeComboBox.setPreferredSize(new Dimension(250, 30));
+        stayTimeComboBox.setBackground(new Color(227, 232, 239));
+
+        // 총 구입 가격대 콤보박스
+        JLabel totalPriceRangeLabel = new JLabel("총 구입 가격대");
+        totalPriceRangeLabel.setOpaque(true);
+        totalPriceRangeLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 16));
+        totalPriceRangeLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        totalPriceRangeLabel.setPreferredSize(new Dimension(120, 30));
+        JComboBox<String> totalPriceRangeComboBox = new JComboBox<>(options);
+        totalPriceRangeComboBox.setPreferredSize(new Dimension(250, 30));
+        totalPriceRangeComboBox.setBackground(new Color(227, 232, 239));
+
+        // 항목별 라벨과 콤보박스 배치
+        // 성별
         gbc.gridx = 0;
         gbc.gridy = 0;
-        inputPanel.add(idLabel, gbc);
-
+        inputPanel.add(genLabel, gbc);
         gbc.gridx = 1;
-        inputPanel.add(idField, gbc);
+        inputPanel.add(genComboBox, gbc);
 
-        // 비밀번호 필드 추가 (두 번째 행)
+        // 나이
         gbc.gridx = 0;
         gbc.gridy = 1;
-        inputPanel.add(passwordLabel, gbc);
-
+        inputPanel.add(ageLabel, gbc);
         gbc.gridx = 1;
-        inputPanel.add(passwordField, gbc);
+        inputPanel.add(ageComboBox, gbc);
+
+        // 입장 시간대
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        inputPanel.add(entryTimeLabel, gbc);
+        gbc.gridx = 1;
+        inputPanel.add(entryTimeComboBox, gbc);
+
+        // 머문 시간
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        inputPanel.add(stayTimeLabel, gbc);
+        gbc.gridx = 1;
+        inputPanel.add(stayTimeComboBox, gbc);
+
+        // 총 구입 가격대
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        inputPanel.add(totalPriceRangeLabel, gbc);
+        gbc.gridx = 1;
+        inputPanel.add(totalPriceRangeComboBox, gbc);
 
         panel.add(inputPanel, BorderLayout.CENTER);
 
         // 하단 버튼 패널
         JPanel buttonPanel = new JPanel();
         buttonPanel.setBackground(Color.WHITE);
-
         JButton confirmButton = new JButton("완료");
         confirmButton.setBackground(new Color(189, 204, 227));
         confirmButton.setPreferredSize(new Dimension(70, 30));
-
         buttonPanel.add(confirmButton);
         panel.add(buttonPanel, BorderLayout.SOUTH);
 
