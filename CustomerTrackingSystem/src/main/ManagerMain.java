@@ -12,6 +12,7 @@ public class ManagerMain extends JFrame {
     private static final String ADD_OWNER_PANEL = "점주 추가 패널";
     private static final String DEL_OWNER_PANEL = "점주 삭제 패널";
     private static final String LIST_OWNER_PANEL = "점주 리스트 패널";
+    private static final String STATS_PANEL = "통계 보기 패널";
 
     public ManagerMain() { //생성자
         setTitle("매니저");
@@ -37,6 +38,12 @@ public class ManagerMain extends JFrame {
         JPanel listOwnerPanel = createListPanel();
         mainPanel.add(listOwnerPanel, LIST_OWNER_PANEL);
 
+        //통계 기준 선택 패널 생성 및 추가
+
+        //점주 리스트 패널 생성 및 추가
+        JPanel statsPanel = createStatsPanel();
+        mainPanel.add(statsPanel, STATS_PANEL);
+
         // 메뉴바 생성
         JMenuBar menuBar = new JMenuBar();
 
@@ -56,6 +63,15 @@ public class ManagerMain extends JFrame {
         ownerAdd.addActionListener(e -> cardLayout.show(mainPanel, ADD_OWNER_PANEL));
         ownerDel.addActionListener(e -> cardLayout.show(mainPanel, DEL_OWNER_PANEL));
         ownerList.addActionListener(e -> cardLayout.show(mainPanel, LIST_OWNER_PANEL));
+
+        // 마우스 클릭 이벤트 추가
+        //원래 1단계 더 거쳐야 함! 임시로 여기 연결
+        stats.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                cardLayout.show(mainPanel, STATS_PANEL);
+            }
+        });
 
         // 메뉴에 항목 추가
         ownerMenu.add(ownerAdd);
@@ -89,7 +105,6 @@ public class ManagerMain extends JFrame {
         return panel;
     }
 
-    //점주 추가 패널을 생성하는 메소드
     //점주 추가 패널을 생성하는 메소드
     public JPanel createAddPanel() {
         JPanel panel = new JPanel(new BorderLayout());
@@ -239,6 +254,51 @@ public class ManagerMain extends JFrame {
         centerPanel.add(scrollPane);
 
         panel.add(centerPanel, BorderLayout.CENTER);
+
+        return panel;
+    }
+
+    //점주별 통계 패널을 생성하는 메소드
+    public JPanel createStatsPanel() {
+        // 메인 패널: BorderLayout을 사용하여 상단과 중앙을 나눕니다.
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBackground(Color.WHITE);
+
+        // 상단 패널 (JComboBox 하나만 오른쪽에 배치)
+        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 10));
+        topPanel.setBackground(Color.WHITE);
+
+        // JComboBox (항목은 가상의 데이터)
+        JComboBox<String> comboBox = new JComboBox<>(new String[]{"Option A1", "Option A2", "Option A3"});
+        topPanel.add(comboBox);
+        panel.add(topPanel, BorderLayout.NORTH);
+
+        // 중앙 그룹 패널 (3개의 컴포넌트가 화면을 가득 채우도록 설정)
+        JPanel centerGroupPanel = new JPanel(new GridLayout(1, 3, 10, 10));
+        centerGroupPanel.setBackground(Color.WHITE);
+
+        // 컴포넌트 1
+        JPanel comp1 = new JPanel();
+        comp1.setBackground(new Color(220, 240, 255));
+        comp1.add(new JLabel("그래프 1"));
+
+        // 컴포넌트 2
+        JPanel comp2 = new JPanel();
+        comp2.setBackground(new Color(220, 240, 255));
+        comp2.add(new JLabel("그래프 2"));
+
+        // 컴포넌트 3
+        JPanel comp3 = new JPanel();
+        comp3.setBackground(new Color(220, 240, 255));
+        comp3.add(new JLabel("그래프 3"));
+
+        // 그룹 패널에 컴포넌트 추가
+        centerGroupPanel.add(comp1);
+        centerGroupPanel.add(comp2);
+        centerGroupPanel.add(comp3);
+
+        // 화면을 채우기 위해 BorderLayout.CENTER에 추가
+        panel.add(centerGroupPanel, BorderLayout.CENTER);
 
         return panel;
     }
