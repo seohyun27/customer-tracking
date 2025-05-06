@@ -3,55 +3,47 @@ package main;
 import javax.swing.*;
 import java.awt.*;
 
-public class ManagerMain extends JFrame {
+public class OwnerMain extends JFrame {
     private JPanel mainPanel; // 주 패널
     private CardLayout cardLayout; // 패널 전환을 위한 레이아웃
 
     //패널 식별자 변수
-    private static final String M_MAIN_PANEL = "매니저 메인 화면 패널"; //빈 화면
-    private static final String ADD_OWNER_PANEL = "점주 추가 패널";
-    private static final String DEL_OWNER_PANEL = "점주 삭제 패널";
-    private static final String LIST_OWNER_PANEL = "점주 리스트 패널";
-    private static final String M_STATS_PANEL = "통계 보기 패널";
+    private static final String O_MAIN_PANEL = "점주 메인 화면 패널"; //빈 화면
+    private static final String ADD_CUSTOMER_PANEL = "고객 추가 패널";
+    private static final String LIST_CUSTOMER_PANEL = "고객 리스트 패널";
+    private static final String O_STATS_PANEL = "통계 보기 패널";
 
-    public ManagerMain() { //생성자
-        setTitle("매니저");
+    public OwnerMain() { //생성자
+        setTitle("점주");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        //CardLayout 초기화
+        // CardLayout 초기화
         cardLayout = new CardLayout();
         mainPanel = new JPanel(cardLayout);
 
-        //매니저 메인 패널 생성 및 추가
+        //점주 메인 패널 생성 및 추가
         JPanel ownerMainPanel = createMainPanel();
-        mainPanel.add(ownerMainPanel, ADD_OWNER_PANEL);
+        mainPanel.add(ownerMainPanel, ADD_CUSTOMER_PANEL);
 
-        // 점주 추가 패널 생성 및 추가
-        JPanel addOwnerPanel = createAddPanel();
-        mainPanel.add(addOwnerPanel, ADD_OWNER_PANEL);
+        // 고객 추가 패널 생성 및 추가
+        JPanel addCustomerPanel = createAddPanel();
+        mainPanel.add(addCustomerPanel, ADD_CUSTOMER_PANEL);
 
-        //점주 삭제 패널 생성 및 추가
-        JPanel delOwnerPanel = createDelPanel();
-        mainPanel.add(delOwnerPanel, DEL_OWNER_PANEL);
+        //고객 리스트 패널 생성 및 추가
+        JPanel listCustomerPanel = createListPanel();
+        mainPanel.add(listCustomerPanel, LIST_CUSTOMER_PANEL);
 
-        //점주 리스트 패널 생성 및 추가
-        JPanel listOwnerPanel = createListPanel();
-        mainPanel.add(listOwnerPanel, LIST_OWNER_PANEL);
-
-        //통계 기준 선택 패널 생성 및 추가
-
-        //통계 보기 패널 생성 및 추가
+        //고객 리스트 패널 생성 및 추가
         JPanel statsPanel = createStatsPanel();
-        mainPanel.add(statsPanel, M_STATS_PANEL);
+        mainPanel.add(statsPanel, O_STATS_PANEL);
 
         // 메뉴바 생성
         JMenuBar menuBar = new JMenuBar();
 
         //첫 번째 메뉴
-        JMenu ownerMenu = new JMenu("점주 관리");
-        JMenuItem ownerAdd = new JMenuItem("추가");
-        JMenuItem ownerDel = new JMenuItem("삭제");
-        JMenuItem ownerList = new JMenuItem("리스트 보기");
+        JMenu customerMenu = new JMenu("고객 관리");
+        JMenuItem customerAdd = new JMenuItem("추가");
+        JMenuItem customerList = new JMenuItem("리스트 보기");
 
         //두 번째 메뉴
         JMenu stats = new JMenu("통계 보기");
@@ -60,25 +52,22 @@ public class ManagerMain extends JFrame {
         JMenu logout = new JMenu("로그아웃");
 
         // 메뉴 아이템 클릭 이벤트 추가
-        ownerAdd.addActionListener(e -> cardLayout.show(mainPanel, ADD_OWNER_PANEL));
-        ownerDel.addActionListener(e -> cardLayout.show(mainPanel, DEL_OWNER_PANEL));
-        ownerList.addActionListener(e -> cardLayout.show(mainPanel, LIST_OWNER_PANEL));
+        customerAdd.addActionListener(e -> cardLayout.show(mainPanel, ADD_CUSTOMER_PANEL));
+        customerList.addActionListener(e -> cardLayout.show(mainPanel, LIST_CUSTOMER_PANEL));
 
         // 마우스 클릭 이벤트 추가
-        //원래 1단계 더 거쳐야 함! 임시로 여기 연결
         stats.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent e) {
-                cardLayout.show(mainPanel, M_STATS_PANEL);
+                cardLayout.show(mainPanel, O_STATS_PANEL);
             }
         });
 
         // 메뉴에 항목 추가
-        ownerMenu.add(ownerAdd);
-        ownerMenu.add(ownerDel);
-        ownerMenu.add(ownerList);
+        customerMenu.add(customerAdd);
+        customerMenu.add(customerList);
 
-        menuBar.add(ownerMenu);
+        menuBar.add(customerMenu);
         menuBar.add(stats);
         menuBar.add(logout);
 
@@ -86,7 +75,7 @@ public class ManagerMain extends JFrame {
         setJMenuBar(menuBar);
 
         // 초기 화면은 매니저 메인 패널로 설정
-        cardLayout.show(mainPanel, M_MAIN_PANEL);
+        cardLayout.show(mainPanel, O_MAIN_PANEL);
 
         // 메인 패널을 프레임에 추가
         add(mainPanel);
@@ -97,7 +86,7 @@ public class ManagerMain extends JFrame {
         setVisible(true);
     }
 
-    //매니저 메인 화면 패널을 생성하는 메소드
+    //점주 메인 화면 패널을 생성하는 메소드
     public JPanel createMainPanel() {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBackground(Color.WHITE);
@@ -105,13 +94,13 @@ public class ManagerMain extends JFrame {
         return panel;
     }
 
-    //점주 추가 패널을 생성하는 메소드
+    //고객 추가 패널을 생성하는 메소드
     public JPanel createAddPanel() {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBackground(Color.WHITE);
 
         // 상단 설명 라벨
-        JLabel titleLabel = new JLabel("추가할 점주의 아이디와 비밀번호를 생성하세요", SwingConstants.CENTER);
+        JLabel titleLabel = new JLabel("추가할 고객의 정보를 입력하세요", SwingConstants.CENTER);
         titleLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
         titleLabel.setBorder(BorderFactory.createEmptyBorder(30, 0, 20, 0));
         panel.add(titleLabel, BorderLayout.NORTH);
@@ -176,71 +165,20 @@ public class ManagerMain extends JFrame {
         return panel;
     }
 
-    //점주 삭제 패널을 생성하는 메소드
-    public JPanel createDelPanel() {
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.setBackground(Color.WHITE);
-
-        // 상단 설명 라벨
-        JLabel titleLabel = new JLabel("삭제할 점주의 아이디를 입력하세요", SwingConstants.CENTER);
-        titleLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
-        titleLabel.setBorder(BorderFactory.createEmptyBorder(30, 0, 20, 0));
-        panel.add(titleLabel, BorderLayout.NORTH);
-
-        // 중앙 입력창 패널
-        JPanel inputPanel = new JPanel(new GridBagLayout());
-        inputPanel.setBackground(Color.WHITE);
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10);
-
-        // 아이디 라벨 및 입력창
-        JLabel idLabel = new JLabel("아이디");
-        idLabel.setOpaque(true);
-        idLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 16));
-        idLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        idLabel.setPreferredSize(new Dimension(80, 30));
-
-        JTextField idField = new JTextField();
-        idField.setPreferredSize(new Dimension(250, 30));
-        idField.setBackground(new Color(227, 232, 239));
-
-        // 아이디 필드 추가
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        inputPanel.add(idLabel, gbc);
-
-        gbc.gridx = 1;
-        inputPanel.add(idField, gbc);
-
-        panel.add(inputPanel, BorderLayout.CENTER);
-
-        // 하단 버튼 패널
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setBackground(Color.WHITE);
-
-        JButton confirmButton = new JButton("완료");
-        confirmButton.setBackground(new Color(189, 204, 227));
-        confirmButton.setPreferredSize(new Dimension(70, 30));
-
-        buttonPanel.add(confirmButton);
-        panel.add(buttonPanel, BorderLayout.SOUTH);
-
-        return panel;
-    }
-
-    //점주 리스트 패널을 생성하는 메소드
+    //고객 리스트 패널을 생성하는 메소드
     public JPanel createListPanel() {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBackground(Color.WHITE);
 
         // 상단 설명 라벨
-        JLabel titleLabel = new JLabel("등록된 점주 리스트", SwingConstants.CENTER);
+        JLabel titleLabel = new JLabel("등록된 고객 리스트", SwingConstants.CENTER);
         titleLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
         titleLabel.setBorder(BorderFactory.createEmptyBorder(30, 0, 20, 0));
         panel.add(titleLabel, BorderLayout.NORTH);
 
         // 중앙 패널에 스크롤이 가능한 리스트를 추가
-        String[] ownerNames = {"Owner1", "Owner2", "Owner3", "Owner4", "Owner5", "Owner6"};
+        String[] ownerNames = {"ID : 1", "성별 : 여성", "나이 : 30대", "입장 시간대 : 14시", "머문 시간 : 1시간 30분", "총 구입 가격대 : 20만원", " ", " ",
+                "ID : 2", "성별 : 남성", "나이 : 40대", "입장 시간 : 10시", "머문 시간 : 30분 이하", "총 구입 가격대 : 50만원", " ", " "};
         JList<String> ownerList = new JList<>(ownerNames);
         ownerList.setFont(new Font("맑은 고딕", Font.PLAIN, 16));
         ownerList.setEnabled(false);  // 읽기 전용
@@ -258,7 +196,7 @@ public class ManagerMain extends JFrame {
         return panel;
     }
 
-    //점주별 통계 패널을 생성하는 메소드
+    //통계 패널을 생성하는 메소드
     public JPanel createStatsPanel() {
         // 메인 패널: BorderLayout을 사용하여 상단과 중앙을 나눕니다.
         JPanel panel = new JPanel(new BorderLayout());
@@ -307,8 +245,9 @@ public class ManagerMain extends JFrame {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new ManagerMain();
+                new OwnerMain();
             }
         });
     }
 }
+
