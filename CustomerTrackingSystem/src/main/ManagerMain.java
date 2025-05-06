@@ -2,6 +2,8 @@ package main;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class ManagerMain extends JFrame {
     private JPanel mainPanel; // 주 패널
@@ -12,6 +14,7 @@ public class ManagerMain extends JFrame {
     private static final String ADD_OWNER_PANEL = "점주 추가 패널";
     private static final String DEL_OWNER_PANEL = "점주 삭제 패널";
     private static final String LIST_OWNER_PANEL = "점주 리스트 패널";
+    private static final String CHOOSE_OWNER_PANEL = "통계 점주 선택 패널";
     private static final String M_STATS_PANEL = "통계 보기 패널";
 
     public ManagerMain() { //생성자
@@ -38,7 +41,9 @@ public class ManagerMain extends JFrame {
         JPanel listOwnerPanel = createListPanel();
         mainPanel.add(listOwnerPanel, LIST_OWNER_PANEL);
 
-        //통계 기준 선택 패널 생성 및 추가
+        //통계 점주 선택 패널 생성 및 추가
+        JPanel chooseOwnerPanel = chooseOwnerPanel();
+        mainPanel.add(chooseOwnerPanel, CHOOSE_OWNER_PANEL);
 
         //통계 보기 패널 생성 및 추가
         JPanel statsPanel = createStatsPanel();
@@ -65,11 +70,10 @@ public class ManagerMain extends JFrame {
         ownerList.addActionListener(e -> cardLayout.show(mainPanel, LIST_OWNER_PANEL));
 
         // 마우스 클릭 이벤트 추가
-        //원래 1단계 더 거쳐야 함! 임시로 여기 연결
         stats.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent e) {
-                cardLayout.show(mainPanel, M_STATS_PANEL);
+                cardLayout.show(mainPanel, CHOOSE_OWNER_PANEL);
             }
         });
 
@@ -257,6 +261,67 @@ public class ManagerMain extends JFrame {
 
         return panel;
     }
+
+    //통계를 확인할 점주를 선택하는 패널을 생성하는 메소드
+    public JPanel chooseOwnerPanel() {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBackground(Color.WHITE);
+
+        // 상단 설명 라벨
+        JLabel titleLabel = new JLabel("통계를 확인하고 싶은 점주의 아이디를 입력하세요", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
+        titleLabel.setBorder(BorderFactory.createEmptyBorder(30, 0, 20, 0));
+        panel.add(titleLabel, BorderLayout.NORTH);
+
+        // 중앙 입력창 패널
+        JPanel inputPanel = new JPanel(new GridBagLayout());
+        inputPanel.setBackground(Color.WHITE);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+
+        // 아이디 라벨 및 입력창
+        JLabel idLabel = new JLabel("아이디");
+        idLabel.setOpaque(true);
+        idLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 16));
+        idLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        idLabel.setPreferredSize(new Dimension(80, 30));
+
+        JTextField idField = new JTextField();
+        idField.setPreferredSize(new Dimension(250, 30));
+        idField.setBackground(new Color(227, 232, 239));
+
+        // 아이디 필드 추가
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        inputPanel.add(idLabel, gbc);
+
+        gbc.gridx = 1;
+        inputPanel.add(idField, gbc);
+
+        panel.add(inputPanel, BorderLayout.CENTER);
+
+        // 하단 버튼 패널
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setBackground(Color.WHITE);
+
+        JButton confirmButton = new JButton("완료");
+        confirmButton.setBackground(new Color(189, 204, 227));
+        confirmButton.setPreferredSize(new Dimension(70, 30));
+
+        // 완료 버튼에 액션 리스너 추가
+        confirmButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cardLayout.show(mainPanel, M_STATS_PANEL);
+            }
+        });
+
+        buttonPanel.add(confirmButton);
+        panel.add(buttonPanel, BorderLayout.SOUTH);
+
+        return panel;
+    }
+
 
     //점주별 통계 패널을 생성하는 메소드
     public JPanel createStatsPanel() {
