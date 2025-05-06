@@ -38,7 +38,7 @@ public class MainControl extends JFrame {
 
         //점주 로그인 패널 생성 및 추가
         JPanel OwnerloginPanel = createOwnerLogin();
-        mainPanel.add(OwnerloginPanel, M_LOGIN_PANEL);
+        mainPanel.add(OwnerloginPanel, O_LOGIN_PANEL);
 
         // 초기 화면은 비밀번호 패널로 설정
         cardLayout.show(mainPanel, PASSWORD_PANEL);
