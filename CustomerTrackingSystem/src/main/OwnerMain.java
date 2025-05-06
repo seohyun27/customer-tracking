@@ -225,8 +225,8 @@ public class OwnerMain extends JFrame {
         panel.add(titleLabel, BorderLayout.NORTH);
 
         // 중앙 패널에 스크롤이 가능한 리스트를 추가
-        String[] ownerNames = {"ID : 1", "성별 : 여성", "나이 : 30대", "입장 시간대 : 14시", "머문 시간 : 1시간 30분", "총 구입 가격대 : 20만원", " ", " ",
-                "ID : 2", "성별 : 남성", "나이 : 40대", "입장 시간 : 10시", "머문 시간 : 30분 이하", "총 구입 가격대 : 50만원", " ", " "};
+        String[] ownerNames = {"ID : 0", "성별 : 여성", "나이 : 30대", "입장 시간대 : 14시", "머문 시간 : 1시간 30분", "총 구입 가격대 : 20만원", " ", " ",
+                "ID : 1", "성별 : 남성", "나이 : 40대", "입장 시간 : 10시", "머문 시간 : 30분 이하", "총 구입 가격대 : 50만원", " ", " "};
         JList<String> ownerList = new JList<>(ownerNames);
         ownerList.setFont(new Font("맑은 고딕", Font.PLAIN, 16));
         ownerList.setEnabled(false);  // 읽기 전용
