@@ -8,7 +8,8 @@ import java.awt.event.ActionListener;
 public class MainControl extends JFrame {
     private JPanel mainPanel; // 주 패널
     private CardLayout cardLayout; // 패널 전환을 위한 레이아웃
-    private String savedPassword; // 저장된 비밀번호
+    private String savedID; // 저장된 아이디
+    private int savedPassword;
 
     // 패널 식별자 상수
     private static final String PASSWORD_PANEL = "패스워드패널";
@@ -100,8 +101,8 @@ public class MainControl extends JFrame {
         confirmButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // 비밀번호를 저장
-                savedPassword = new String(passwordField.getPassword());
+                // 비밀번호를 정수로 바꿔서 저장
+                savedPassword = Integer.parseInt(new String(passwordField.getPassword()));
 
                 // 로그인 선택 패널로 전환
                 setTitle("로그인");
