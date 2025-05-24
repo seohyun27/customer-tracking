@@ -10,6 +10,7 @@ public class MainControl extends JFrame {
     private CardLayout cardLayout; // 패널 전환을 위한 레이아웃
     private String savedID; // 저장된 아이디
     private int savedPassword;
+    private Server server;
 
     // 패널 식별자 상수
     private static final String PASSWORD_PANEL = "패스워드패널";
@@ -101,12 +102,27 @@ public class MainControl extends JFrame {
         confirmButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // 비밀번호를 정수로 바꿔서 저장
-                savedPassword = Integer.parseInt(new String(passwordField.getPassword()));
+                String passwordText = new String(passwordField.getPassword());
+                if (passwordText.length() >= 6) {
+                    try {
+                        // 비밀번호를 정수로 변환하여 저장
+                        savedPassword = Integer.parseInt(passwordText);
 
-                // 로그인 선택 패널로 전환
-                setTitle("로그인");
-                cardLayout.show(mainPanel, LOGIN_PANEL);
+                        // Manager 인스턴스 생성 및 비밀번호 저장
+                        Manager manager = new Manager(savedPassword);
+                        server = new Server(manager);
+
+                        // 로그인 화면으로 전환
+                        setTitle("로그인");
+                        cardLayout.show(mainPanel, LOGIN_PANEL);
+                    } catch (NumberFormatException ex) {
+                        // 숫자로 변환 실패 시 처리 (예: 비밀번호에 숫자가 아닌 문자 포함)
+                        JOptionPane.showMessageDialog(MainControl.this, "비밀번호는 숫자만 입력해주세요.", "오류", JOptionPane.ERROR_MESSAGE);
+                    }
+                } else {
+                    // 6자리 미만일 때 메시지 출력
+                    JOptionPane.showMessageDialog(MainControl.this, "비밀번호는 6자리 이상으로 입력해주세요.", "경고", JOptionPane.WARNING_MESSAGE);
+                }
             }
         });
 

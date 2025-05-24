@@ -16,7 +16,7 @@ public class Manager extends User {
     }
 
     public void addOwner(Owner owner){
-        //오너 클래스 생성자로 생성 후 리스트에 연결
+        ownerList.add(owner);
     }
 
     public void delOwner(String ID){
