@@ -13,7 +13,7 @@ public class Owner extends User{
     }
 
     public String getID() {
-        return ID;
+        return this.ID;
     }
 
     // 고객 추가 메소드

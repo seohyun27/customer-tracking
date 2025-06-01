@@ -4,10 +4,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class ManagerMain extends JFrame {
     private JPanel mainPanel; // 주 패널
-    private CardLayout cardLayout; // 패널 전환을 위한 레이아웃
+    private CardLayout cardLayout;
+    private Server server;// 패널 전환을 위한 레이아웃
 
     //패널 식별자 변수
     private static final String M_MAIN_PANEL = "매니저 메인 화면 패널"; //빈 화면
@@ -17,7 +19,9 @@ public class ManagerMain extends JFrame {
     private static final String CHOOSE_OWNER_PANEL = "통계 점주 선택 패널";
     private static final String M_STATS_PANEL = "통계 보기 패널";
 
-    public ManagerMain() { //생성자
+    public ManagerMain(Server server) {//생성자
+        this.server = server;
+
         setTitle("매니저");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -174,6 +178,53 @@ public class ManagerMain extends JFrame {
         confirmButton.setBackground(new Color(189, 204, 227));
         confirmButton.setPreferredSize(new Dimension(70, 30));
 
+        confirmButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String id = idField.getText().trim();
+                String pwText = new String(passwordField.getPassword()).trim();
+
+                if (id.isEmpty() || pwText.isEmpty()) {
+                    JOptionPane.showMessageDialog(ManagerMain.this, "아이디와 비밀번호를 모두 입력하세요.", "경고", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
+                // 비밀번호 길이 체크 (6자리 이상)
+                if (pwText.length() < 6) {
+                    JOptionPane.showMessageDialog(ManagerMain.this, "비밀번호는 6자리 이상이어야 합니다.", "경고", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
+                // 숫자인지 검사
+                if (!pwText.matches("\\d+")) {
+                    JOptionPane.showMessageDialog(ManagerMain.this, "비밀번호는 숫자만 입력해주세요.", "오류", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                try {
+                    // 비밀번호를 정수로 변환
+                    int pw = Integer.parseInt(pwText);
+
+                    // Owner 객체 생성
+                    Owner newOwner = new Owner(id, pw);
+
+                    // 서버에 추가
+                    if (server != null) {
+                        server.addOwner(newOwner);
+                        JOptionPane.showMessageDialog(ManagerMain.this, "점주가 성공적으로 추가되었습니다.", "성공", JOptionPane.INFORMATION_MESSAGE);
+                        idField.setText("");
+                        passwordField.setText("");
+                    } else {
+                        JOptionPane.showMessageDialog(ManagerMain.this, "서버 정보가 없습니다.", "오류", JOptionPane.ERROR_MESSAGE);
+                    }
+                } catch (NumberFormatException ex) {
+                    // 숫자로 변환 실패 시 처리 (이 경우는 사실 발생하지 않음, 이미 검사했기 때문)
+                    JOptionPane.showMessageDialog(ManagerMain.this, "비밀번호는 숫자만 입력해주세요.", "오류", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+
         buttonPanel.add(confirmButton);
         panel.add(buttonPanel, BorderLayout.SOUTH);
 
@@ -225,6 +276,39 @@ public class ManagerMain extends JFrame {
         JButton confirmButton = new JButton("완료");
         confirmButton.setBackground(new Color(189, 204, 227));
         confirmButton.setPreferredSize(new Dimension(70, 30));
+
+        confirmButton.addActionListener(e -> {
+            String inputID = idField.getText().trim();
+
+            if (inputID.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "아이디를 입력하세요.", "경고", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            boolean found = false;
+
+            // 서버에 등록된 점주 리스트를 가져옴
+            ArrayList<Owner> owners = server.getManager().getOwners();
+
+            // 리스트 순회하며 아이디 비교
+            for (Owner owner : owners) {
+                if (owner.getID().trim().equalsIgnoreCase(inputID.trim())) {
+                    // 일치하는 점주 삭제
+                    server.getManager().delOwner(inputID);
+                    JOptionPane.showMessageDialog(this, "해당 점주가 삭제되었습니다.", "성공", JOptionPane.INFORMATION_MESSAGE);
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found) {
+                JOptionPane.showMessageDialog(this, "일치하는 점주가 없습니다.", "알림", JOptionPane.WARNING_MESSAGE);
+            }
+
+            // 입력창 초기화
+            idField.setText("");
+        });
+
 
         buttonPanel.add(confirmButton);
         panel.add(buttonPanel, BorderLayout.SOUTH);
@@ -368,6 +452,7 @@ public class ManagerMain extends JFrame {
         return panel;
     }
 
+    /*
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -376,4 +461,5 @@ public class ManagerMain extends JFrame {
             }
         });
     }
+    */
 }
