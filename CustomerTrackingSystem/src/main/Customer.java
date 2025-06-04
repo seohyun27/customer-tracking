@@ -41,6 +41,11 @@ public class Customer {
         return totalPrice;
     }
 
+
+
+    //===========이쪽 내용은 Statistics 클래스로 이동================
+    // 그냥 사용 or 필요하다면 함수로 만들기
+
     public String getStringGender() {
         if (gender == 0) {
             return "남성";
