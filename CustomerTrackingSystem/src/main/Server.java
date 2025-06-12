@@ -64,4 +64,3 @@ public class Server {
         return null; // 해당 ID의 점주 없음
     }
 }
-

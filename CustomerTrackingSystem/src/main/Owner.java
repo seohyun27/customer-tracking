@@ -25,7 +25,7 @@ public class Owner extends User{
 
     // 고객 추가 메소드
     public void addCust(int gender, int ageRange,
-                         int visitRange, int stayTime, int totalPrice) {
+                        int visitRange, int stayTime, int totalPrice) {
         Customer customer = new Customer(gender, ageRange, visitRange, stayTime, totalPrice);
         customerList.add(customer);
     }
