@@ -1,16 +1,14 @@
 package main;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-
 public class Manager extends User {
-    ArrayList<Owner> ownerList;
 
     Manager(int PW){
-        this.setPW(PW);
-        ownerList = new ArrayList<>();
+        this.PW = PW;
     }
+}
 
+/*
+    ArrayList<Owner> ownerList;
     public ArrayList<Owner> getOwners() {
         return ownerList;
     }
@@ -37,10 +35,4 @@ public class Manager extends User {
         }
         return idList;
     }
-}
-
-/*+ Manager(PW: int) : 매니저 객체를 생성하는 생성자
-+ getOwners() : ArrayList<Owner> : 오너 리스트 가져오기
-+ addOwner(owner: Owner) : void : 새로운 오너 추가하기
-+ delOwner(ID: int) : void : 해당 ID를 가진 오너 삭제하기
-+ getOwnerIDs() : ArrayList<String> : 내가 생성한 오너들의 아이디만을 저장한 아이디 리스트 가져오기*/
+* */

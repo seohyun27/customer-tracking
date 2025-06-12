@@ -7,9 +7,10 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class ManagerMain extends JFrame {
+    private Server server;
     private JPanel mainPanel; // 주 패널
-    private CardLayout cardLayout;
-    private Server server;// 패널 전환을 위한 레이아웃
+    private CardLayout cardLayout; // 패널 전환을 위한 레이아웃
+    private Owner statsOwner; // 통계를 보기 위해 선택된 오너
 
     //패널 식별자 변수
     private static final String M_MAIN_PANEL = "매니저 메인 화면 패널"; //빈 화면
@@ -74,12 +75,23 @@ public class ManagerMain extends JFrame {
         ownerList.addActionListener(e -> cardLayout.show(mainPanel, LIST_OWNER_PANEL));
 
         // 마우스 클릭 이벤트 추가
+        // 통계보기
         stats.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent e) {
                 cardLayout.show(mainPanel, CHOOSE_OWNER_PANEL);
             }
         });
+
+        // 로그아웃
+        logout.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                new MainControl(server); // 로그인 화면 열기
+                ManagerMain.this.dispose(); // 기존 창 닫기
+            }
+        });
+
 
         // 메뉴에 항목 추가
         ownerMenu.add(ownerAdd);
@@ -184,46 +196,41 @@ public class ManagerMain extends JFrame {
                 String id = idField.getText().trim();
                 String pwText = new String(passwordField.getPassword()).trim();
 
+                //return 값이 false라면 해당 ID를 가진 점주가 이미 존재합니다
+                //비밀번호가 6자리 이상의 숫자인지만 확인 -> 아니라면 비밀번호는 6자리 이상이어야 합니다 출력
+
                 if (id.isEmpty() || pwText.isEmpty()) {
-                    JOptionPane.showMessageDialog(ManagerMain.this, "아이디와 비밀번호를 모두 입력하세요.", "경고", JOptionPane.WARNING_MESSAGE);
                     return;
                 }
 
-                // 비밀번호 길이 체크 (6자리 이상)
-                if (pwText.length() < 6) {
+                if (!pwText.matches("\\d+")) { // PW가 숫자인지 체크
+                    JOptionPane.showMessageDialog(ManagerMain.this, "비밀번호는 숫자만 입력해주세요.", "오류", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                if (pwText.length() < 6) { //PW가 6자리 이상인지 체크
                     JOptionPane.showMessageDialog(ManagerMain.this, "비밀번호는 6자리 이상이어야 합니다.", "경고", JOptionPane.WARNING_MESSAGE);
                     return;
                 }
 
-                // 숫자인지 검사
-                if (!pwText.matches("\\d+")) {
-                    JOptionPane.showMessageDialog(ManagerMain.this, "비밀번호는 숫자만 입력해주세요.", "오류", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-
                 try {
-                    // 비밀번호를 정수로 변환
                     int pw = Integer.parseInt(pwText);
-
-                    // Owner 객체 생성
-                    Owner newOwner = new Owner(id, pw);
 
                     // 서버에 추가
                     if (server != null) {
-                        server.addOwner(newOwner);
-                        JOptionPane.showMessageDialog(ManagerMain.this, "점주가 성공적으로 추가되었습니다.", "성공", JOptionPane.INFORMATION_MESSAGE);
-                        idField.setText("");
-                        passwordField.setText("");
-                    } else {
-                        JOptionPane.showMessageDialog(ManagerMain.this, "서버 정보가 없습니다.", "오류", JOptionPane.ERROR_MESSAGE);
+                        if (server.addOwner(id, pw)) {
+                            JOptionPane.showMessageDialog(ManagerMain.this, "점주가 성공적으로 추가되었습니다.", "성공", JOptionPane.INFORMATION_MESSAGE);
+                            idField.setText("");
+                            passwordField.setText("");
+                        } else {
+                            JOptionPane.showMessageDialog(ManagerMain.this, "해당 아이디를 가진 점주가 이미 존재합니다.", "오류", JOptionPane.ERROR_MESSAGE);
+                        }
                     }
-                } catch (NumberFormatException ex) {
-                    // 숫자로 변환 실패 시 처리 (이 경우는 사실 발생하지 않음, 이미 검사했기 때문)
-                    JOptionPane.showMessageDialog(ManagerMain.this, "비밀번호는 숫자만 입력해주세요.", "오류", JOptionPane.ERROR_MESSAGE);
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(ManagerMain.this, "오류가 발생했습니다.", "오류", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
-
 
         buttonPanel.add(confirmButton);
         panel.add(buttonPanel, BorderLayout.SOUTH);
@@ -277,38 +284,20 @@ public class ManagerMain extends JFrame {
         confirmButton.setBackground(new Color(189, 204, 227));
         confirmButton.setPreferredSize(new Dimension(70, 30));
 
-        confirmButton.addActionListener(e -> {
+        confirmButton.addActionListener(e -> { //삭제할 점주의 ID를 입력한 뒤 "완료"를 클릭
             String inputID = idField.getText().trim();
 
             if (inputID.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "아이디를 입력하세요.", "경고", JOptionPane.WARNING_MESSAGE);
                 return;
             }
 
-            boolean found = false;
+            if (server.delOwner(inputID))
+                JOptionPane.showMessageDialog(this, "해당 점주가 삭제되었습니다.", "성공", JOptionPane.INFORMATION_MESSAGE);
+            else
+                JOptionPane.showMessageDialog(this, "입력한 아이디를 가진 점주가 존재하지 않습니다", "오류", JOptionPane.WARNING_MESSAGE);
 
-            // 서버에 등록된 점주 리스트를 가져옴
-            ArrayList<Owner> owners = server.getManager().getOwners();
-
-            // 리스트 순회하며 아이디 비교
-            for (Owner owner : owners) {
-                if (owner.getID().trim().equalsIgnoreCase(inputID.trim())) {
-                    // 일치하는 점주 삭제
-                    server.getManager().delOwner(inputID);
-                    JOptionPane.showMessageDialog(this, "해당 점주가 삭제되었습니다.", "성공", JOptionPane.INFORMATION_MESSAGE);
-                    found = true;
-                    break;
-                }
-            }
-
-            if (!found) {
-                JOptionPane.showMessageDialog(this, "일치하는 점주가 없습니다.", "알림", JOptionPane.WARNING_MESSAGE);
-            }
-
-            // 입력창 초기화
-            idField.setText("");
+            idField.setText(""); // 입력창 초기화
         });
-
 
         buttonPanel.add(confirmButton);
         panel.add(buttonPanel, BorderLayout.SOUTH);
@@ -328,12 +317,13 @@ public class ManagerMain extends JFrame {
         panel.add(titleLabel, BorderLayout.NORTH);
 
         // 중앙 패널에 스크롤이 가능한 리스트를 추가
-        String[] ownerNames = {"Owner1", "Owner2", "Owner3", "Owner4", "Owner5", "Owner6"};
-        JList<String> ownerList = new JList<>(ownerNames);
-        ownerList.setFont(new Font("맑은 고딕", Font.PLAIN, 16));
-        ownerList.setEnabled(false);  // 읽기 전용
+        ArrayList<String> ownerNameList = server.getOwnerIDs(); // Server 클래스에서 받아온 arraylist
+        String[] ownerNames = ownerNameList.toArray(new String[0]); // 배열 타입으로 변환
+        JList<String> ownerIDList = new JList<>(ownerNames);
+        ownerIDList.setFont(new Font("맑은 고딕", Font.PLAIN, 16));
+        ownerIDList.setEnabled(false);  // 읽기 전용
 
-        JScrollPane scrollPane = new JScrollPane(ownerList);
+        JScrollPane scrollPane = new JScrollPane(ownerIDList);
         scrollPane.setPreferredSize(new Dimension(250, 200));
 
         // FlowLayout을 사용하는 패널에 스크롤 페인지를 감싸서 중앙으로 배치
@@ -346,7 +336,7 @@ public class ManagerMain extends JFrame {
         return panel;
     }
 
-    //통계를 확인할 점주를 선택하는 패널을 생성하는 메소드
+    // 통계를 확인할 점주를 선택하는 패널을 생성하는 메소드
     public JPanel chooseOwnerPanel() {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBackground(Color.WHITE);
@@ -396,7 +386,18 @@ public class ManagerMain extends JFrame {
         confirmButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cardLayout.show(mainPanel, M_STATS_PANEL);
+                String inputID = idField.getText().trim();
+                statsOwner = server.getOwner(inputID);
+
+                // 점주가 존재하지 않는 경우
+                if (statsOwner == null) {
+                    JOptionPane.showMessageDialog(ManagerMain.this,
+                            "해당 아이디를 가진 점주가 존재하지 않습니다.", "오류", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                cardLayout.show(mainPanel, M_STATS_PANEL); // 점주가 존재하는 경우 통계 패널로 이동
+                idField.setText(""); // 입력창 초기화
             }
         });
 
@@ -407,7 +408,8 @@ public class ManagerMain extends JFrame {
     }
 
 
-    //점주별 통계 패널을 생성하는 메소드
+    // 아직 구현되지 않은 기능
+    // 점주별 통계 패널을 생성하는 메소드
     public JPanel createStatsPanel() {
         // 메인 패널: BorderLayout을 사용하여 상단과 중앙을 나눕니다.
         JPanel panel = new JPanel(new BorderLayout());

@@ -7,9 +7,10 @@ public class Customer {
     private int visitRange;
     private int stayTime;
     private int totalPrice;
+    public static int CID_NUM = 0; //전체 고객의 인스턴스의 개수
 
-    public Customer(int CID, int gender, int ageRange, int visitRange, int stayTime, int totalPrice) {
-        this.CID = CID;
+    public Customer(int gender, int ageRange, int visitRange, int stayTime, int totalPrice) {
+        this.CID = ++CID_NUM;
         this.gender = gender;
         this.ageRange = ageRange;
         this.visitRange = visitRange;
@@ -43,8 +44,8 @@ public class Customer {
 
 
 
-    //===========이쪽 내용은 Statistics 클래스로 이동================
-    // 그냥 사용 or 필요하다면 함수로 만들기
+    //===========이쪽 내용은 Owner 클래스의 getCustInfo() 함수 안으로 이동================
+    // 그냥 사용 or 필요하다면 private 함수로 만들기
 
     public String getStringGender() {
         if (gender == 0) {

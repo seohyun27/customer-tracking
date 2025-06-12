@@ -1,14 +1,11 @@
 package main;
 
 public abstract class User {
-    private int PW;
+    protected int PW;
 
-    public int getPW() {
-        return PW;
+    public boolean checkPW(int PW) {
+        if(PW == this.PW)
+            return true;
+        return false;
     }
-
-    public void setPW(int PW) {
-        this.PW = PW;
-    }
-
 }

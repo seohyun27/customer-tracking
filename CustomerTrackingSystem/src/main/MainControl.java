@@ -8,8 +8,6 @@ import java.awt.event.ActionListener;
 public class MainControl extends JFrame {
     private JPanel mainPanel; // 주 패널
     private CardLayout cardLayout; // 패널 전환을 위한 레이아웃
-    private String savedID; // 저장된 아이디
-    private int savedPassword;
     private Server server;
 
     // 패널 식별자 상수
@@ -17,8 +15,6 @@ public class MainControl extends JFrame {
     private static final String LOGIN_PANEL = "로그인패널";
     private static final String M_LOGIN_PANEL = "매니저로그인패널";
     private static final String O_LOGIN_PANEL = "점주로그인패널";
-
-    private JPasswordField managerPasswordField; // 매니저 비밀번호 입력 필드
 
     public MainControl() { //생성자
         setTitle("비밀번호 초기화");
@@ -46,6 +42,41 @@ public class MainControl extends JFrame {
 
         // 초기 화면은 비밀번호 패널로 설정
         cardLayout.show(mainPanel, PASSWORD_PANEL);
+
+        // 메인 패널을 프레임에 추가
+        add(mainPanel);
+
+        // 창 설정
+        setSize(850, 500);
+        setLocationRelativeTo(null);
+        setVisible(true);
+    }
+
+    // 매니저 비밀번호 초기화 후의 로그인 기능을 구현
+    public MainControl(Server server) { //생성자
+        this.server = server;
+
+        setTitle("로그인");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        // CardLayout 초기화
+        cardLayout = new CardLayout();
+        mainPanel = new JPanel(cardLayout);
+
+        // 로그인 선택 패널 생성 및 추가
+        JPanel loginChoosePanel = createChooseLogin();
+        mainPanel.add(loginChoosePanel, LOGIN_PANEL);
+
+        //매니저 로그인 패널 생성 및 추가
+        JPanel ManagerloginPanel = createManagerLogin();
+        mainPanel.add(ManagerloginPanel, M_LOGIN_PANEL);
+
+        //점주 로그인 패널 생성 및 추가
+        JPanel OwnerloginPanel = createOwnerLogin();
+        mainPanel.add(OwnerloginPanel, O_LOGIN_PANEL);
+
+        // 초기 화면은 로그인 선택 패널로 설정
+        cardLayout.show(mainPanel, LOGIN_PANEL);
 
         // 메인 패널을 프레임에 추가
         add(mainPanel);
@@ -105,12 +136,12 @@ public class MainControl extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String passwordText = new String(passwordField.getPassword());
-                if (passwordText.length() >= 6) {
+                if (passwordText.length() >= 6) { //비밀번호가 6자리 이상의 숫자라면 매니저 인스턴스 생성
                     try {
                         // 비밀번호를 정수로 변환하여 저장
-                        savedPassword = Integer.parseInt(passwordText);
+                        int savedPassword = Integer.parseInt(passwordText);
 
-                        // Manager 인스턴스 생성 및 비밀번호 저장
+                        // Manager 인스턴스 생성 및 Server에 저장
                         Manager manager = new Manager(savedPassword);
                         server = new Server(manager);
 
@@ -218,16 +249,16 @@ public class MainControl extends JFrame {
         passwordLabel.setHorizontalAlignment(SwingConstants.CENTER);
         passwordLabel.setPreferredSize(new Dimension(80, 30));
 
-        // 멤버 변수로 선언된 passwordField 할당
-        managerPasswordField = new JPasswordField();
-        managerPasswordField.setPreferredSize(new Dimension(250, 30));
-        managerPasswordField.setBackground(new Color(227, 232, 239));
+        // 지역 변수로 선언
+        JPasswordField managerPWField = new JPasswordField();
+        managerPWField.setPreferredSize(new Dimension(250, 30));
+        managerPWField.setBackground(new Color(227, 232, 239));
 
         gbc.gridx = 0;
         gbc.gridy = 0;
         inputPanel.add(passwordLabel, gbc);
         gbc.gridx = 1;
-        inputPanel.add(managerPasswordField, gbc);
+        inputPanel.add(managerPWField, gbc);
 
         panel.add(inputPanel, BorderLayout.CENTER);
 
@@ -238,29 +269,21 @@ public class MainControl extends JFrame {
         confirmButton.setBackground(new Color(189, 204, 227));
         confirmButton.setPreferredSize(new Dimension(70, 30));
 
-        // 버튼 액션
+        // 버튼 액션 - 지역 변수 접근 가능
         confirmButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String inputPasswordStr = new String(managerPasswordField.getPassword());
+                String inputPWStr = new String(managerPWField.getPassword());
                 try {
-                    int inputPassword = Integer.parseInt(inputPasswordStr);
-                    if (server != null && server.getManager() != null) {
-                        int storedPassword = server.getManager().getPW();
-                        if (inputPassword == storedPassword) {
-                            SwingUtilities.invokeLater(() -> {
-                                new ManagerMain(server);
-                                // 기존 창 닫기
-                                MainControl.this.dispose();
-                            });
-                        } else {
-                            JOptionPane.showMessageDialog(MainControl.this, "잘못된 비밀번호를 입력하였습니다", "오류", JOptionPane.ERROR_MESSAGE);
-                        }
+                    int inputPW = Integer.parseInt(inputPWStr);
+                    if (server.checkPW(inputPW)) {
+                        new ManagerMain(server); // 매니저 메인 화면 열기
+                        MainControl.this.dispose(); // 기존 창 닫기
                     } else {
-                        JOptionPane.showMessageDialog(MainControl.this, "서버 또는 매니저 정보가 없습니다.", "오류", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(MainControl.this, "비밀번호가 일치하지 않습니다", "오류", JOptionPane.ERROR_MESSAGE);
                     }
                 } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(MainControl.this, "비밀번호는 숫자만 입력해주세요.", "오류", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(MainControl.this, "잘못된 형식의 비밀번호를 입력하였습니다", "오류", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
@@ -295,9 +318,10 @@ public class MainControl extends JFrame {
         idLabel.setHorizontalAlignment(SwingConstants.CENTER);
         idLabel.setPreferredSize(new Dimension(80, 30));
 
-        JTextField idField = new JTextField();
-        idField.setPreferredSize(new Dimension(250, 30));
-        idField.setBackground(new Color(227, 232, 239));
+        // 지역 변수로 선언
+        JPasswordField ownerIDField = new JPasswordField();
+        ownerIDField.setPreferredSize(new Dimension(250, 30));
+        ownerIDField.setBackground(new Color(227, 232, 239));
 
         // 비밀번호 라벨 및 입력창
         JLabel passwordLabel = new JLabel("비밀번호");
@@ -306,9 +330,10 @@ public class MainControl extends JFrame {
         passwordLabel.setHorizontalAlignment(SwingConstants.CENTER);
         passwordLabel.setPreferredSize(new Dimension(80, 30));
 
-        JPasswordField passwordField = new JPasswordField();
-        passwordField.setPreferredSize(new Dimension(250, 30));
-        passwordField.setBackground(new Color(227, 232, 239));
+        // 지역 변수로 선언
+        JPasswordField ownerPWField = new JPasswordField();
+        ownerPWField.setPreferredSize(new Dimension(250, 30));
+        ownerPWField.setBackground(new Color(227, 232, 239));
 
         // 아이디 필드 추가 (첫 번째 행)
         gbc.gridx = 0;
@@ -316,7 +341,7 @@ public class MainControl extends JFrame {
         inputPanel.add(idLabel, gbc);
 
         gbc.gridx = 1;
-        inputPanel.add(idField, gbc);
+        inputPanel.add(ownerIDField, gbc);
 
         // 비밀번호 필드 추가 (두 번째 행)
         gbc.gridx = 0;
@@ -324,7 +349,7 @@ public class MainControl extends JFrame {
         inputPanel.add(passwordLabel, gbc);
 
         gbc.gridx = 1;
-        inputPanel.add(passwordField, gbc);
+        inputPanel.add(ownerPWField, gbc);
 
         panel.add(inputPanel, BorderLayout.CENTER);
 
@@ -336,12 +361,38 @@ public class MainControl extends JFrame {
         confirmButton.setBackground(new Color(189, 204, 227));
         confirmButton.setPreferredSize(new Dimension(70, 30));
 
+        // 버튼 액션 - 지역 변수 접근 가능
+        confirmButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String inputID = new String(ownerIDField.getPassword());
+                String inputPWStr = new String(ownerPWField.getPassword());
+
+                if (inputID.isEmpty() || inputPWStr.isEmpty()) {
+                    return;
+                }
+
+                try {
+                    int inputPW = Integer.parseInt(inputPWStr);
+
+                    if (server.checkPW_ID(inputID, inputPW)) {
+                        Owner owner = server.getOwner(inputID);
+                        new OwnerMain(server, owner); // 점주 메인 화면 열기
+                        MainControl.this.dispose(); // 기존 창 닫기
+                    } else {
+                        JOptionPane.showMessageDialog(MainControl.this, "비밀번호가 일치하지 않습니다", "오류", JOptionPane.ERROR_MESSAGE);
+                    }
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(MainControl.this, "잘못된 형식의 비밀번호를 입력하였습니다", "오류", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
         buttonPanel.add(confirmButton);
         panel.add(buttonPanel, BorderLayout.SOUTH);
 
         return panel;
     }
-
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
@@ -352,4 +403,3 @@ public class MainControl extends JFrame {
         });
     }
 }
-

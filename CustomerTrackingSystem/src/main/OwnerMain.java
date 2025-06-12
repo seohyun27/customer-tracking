@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 
 public class OwnerMain extends JFrame {
+    private Server server;
+    private Owner owner; // 현재 로그인 중인 점주
     private JPanel mainPanel; // 주 패널
     private CardLayout cardLayout; // 패널 전환을 위한 레이아웃
 
@@ -13,7 +15,10 @@ public class OwnerMain extends JFrame {
     private static final String LIST_CUSTOMER_PANEL = "고객 리스트 패널";
     private static final String O_STATS_PANEL = "통계 보기 패널";
 
-    public OwnerMain() { //생성자
+    public OwnerMain(Server server, Owner owner) {//생성자
+        this.owner = owner;
+        this.server = server;
+
         setTitle("점주");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -62,6 +67,16 @@ public class OwnerMain extends JFrame {
                 cardLayout.show(mainPanel, O_STATS_PANEL);
             }
         });
+
+        // 로그아웃
+        logout.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                new MainControl(server); // 로그인 화면 열기
+                OwnerMain.this.dispose(); // 기존 창 닫기
+            }
+        });
+
 
         // 메뉴에 항목 추가
         customerMenu.add(customerAdd);
@@ -289,6 +304,7 @@ public class OwnerMain extends JFrame {
         return panel;
     }
 
+    /*
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -296,6 +312,6 @@ public class OwnerMain extends JFrame {
                 new OwnerMain();
             }
         });
-    }
+    }*/
 }
 
