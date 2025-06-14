@@ -77,22 +77,26 @@ public class Owner extends User{
 
     //자신이 저장한 고객들의 모든 고객정보를 문자열 리스트 가져오기
     //(가져온 Integer 정보를 한글로 바꾸는 수정 필요)
-    /*
     public ArrayList<String> getCustInfo() {
         ArrayList<String> infoList = new ArrayList<>();
+        Translation translation = new Translation(); // 번역 클래스 생성
+
         for (Customer c : customerList) {
-            String info = String.format(
-                    "고객ID: %d\n성별: %s\n나이대: %s\n방문시간: %s\n머문시간: %s\n구매금액대: %s",
-                    c.getCID(),
-                    c.getStringGender(),
-                    c.getStringAgeRange(),
-                    c.getStringVisitRange(),
-                    c.getStringStayTime(),
-                    c.getStringTotalPrice()
-            );
+            String info = "고객ID : " + c.getCID();
+            infoList.add(info);
+            info = "성별 : " + translation.getStringGender(c.getGender());
+            infoList.add(info);
+            info = "나이대 : " + translation.getStringAgeRange(c.getAgeRange());
+            infoList.add(info);
+            info = "방문 시간 : " + translation.getStringVisitRange(c.getVisitRange());
+            infoList.add(info);
+            info = "머문 시간 : " + translation.getStringStayTime(c.getStayTime());
+            infoList.add(info);
+            info = "구매 가격대 : " + translation.getStringTotalPrice(c.getTotalPrice());
+            infoList.add(info);
+            info = " ";
             infoList.add(info);
         }
         return infoList;
     }
-     */
 }

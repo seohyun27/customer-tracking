@@ -4,12 +4,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class OwnerMain extends JFrame {
     private Server server;
     private Owner owner; // 현재 로그인 중인 점주
     private JPanel mainPanel; // 주 패널
     private CardLayout cardLayout; // 패널 전환을 위한 레이아웃
+    private DefaultListModel<String> listModel; // 고객 리스트 출력 기능을 위한 동적 리스트
 
     //패널 식별자 변수
     private static final String O_MAIN_PANEL = "점주 메인 화면 패널"; //빈 화면
@@ -250,6 +252,8 @@ public class OwnerMain extends JFrame {
                 owner.addCust(gender, age, visitRange, stayTime, totalPrice);
                 JOptionPane.showMessageDialog(OwnerMain.this, "고객의 정보가 성공적으로 추가되었습니다.", "성공", JOptionPane.INFORMATION_MESSAGE);
 
+                updateCustList(); //고객 리스트 백업
+
                 genComboBox.setSelectedIndex(0); // 모든 Combobox를 초기값으로 되돌리기
                 ageComboBox.setSelectedIndex(0);
                 visitRangeComboBox.setSelectedIndex(0);
@@ -264,6 +268,15 @@ public class OwnerMain extends JFrame {
         return panel;
     }
 
+    //고객 리스트 패널을 위한 리스트 백업 함수
+    private void updateCustList() {
+        listModel.clear();
+        ArrayList<String> custInfoList = owner.getCustInfo();
+        for (String custInfo : custInfoList) {
+            listModel.addElement(custInfo);
+        }
+    }
+
     //고객 리스트 패널을 생성하는 메소드
     public JPanel createListPanel() {
         JPanel panel = new JPanel(new BorderLayout());
@@ -275,14 +288,19 @@ public class OwnerMain extends JFrame {
         titleLabel.setBorder(BorderFactory.createEmptyBorder(30, 0, 20, 0));
         panel.add(titleLabel, BorderLayout.NORTH);
 
-        // 중앙 패널에 스크롤이 가능한 리스트를 추가
-        String[] ownerNames = {"ID : 0", "성별 : 여성", "나이 : 30대", "입장 시간대 : 14시", "머문 시간 : 1시간 30분", "총 구입 가격대 : 20만원", " ", " ",
-                "ID : 1", "성별 : 남성", "나이 : 40대", "입장 시간 : 10시", "머문 시간 : 30분 이하", "총 구입 가격대 : 50만원", " ", " "};
-        JList<String> ownerList = new JList<>(ownerNames);
-        ownerList.setFont(new Font("맑은 고딕", Font.PLAIN, 16));
-        ownerList.setEnabled(false);  // 읽기 전용
+        // 중앙에 scrollPane 추가
+        listModel = new DefaultListModel<>(); // 모델 초기화
+        ArrayList<String> custInfoList = owner.getCustInfo();
+        for (String custInfo : custInfoList) {
+            listModel.addElement(custInfo);
+        }
 
-        JScrollPane scrollPane = new JScrollPane(ownerList);
+        // JList에 모델 연결
+        JList<String> ownerIDList = new JList<>(listModel);
+        ownerIDList.setFont(new Font("맑은 고딕", Font.PLAIN, 16));
+        ownerIDList.setEnabled(false);
+
+        JScrollPane scrollPane = new JScrollPane(ownerIDList);
         scrollPane.setPreferredSize(new Dimension(250, 200));
 
         // FlowLayout을 사용하는 패널에 스크롤 페인지를 감싸서 중앙으로 배치
