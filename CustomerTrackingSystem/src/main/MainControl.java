@@ -294,7 +294,7 @@ public class MainControl extends JFrame {
         return panel;
     }
 
-    //오너 로그인 패널을 만드는 메소드
+    //점주 로그인 패널을 만드는 메소드
     public JPanel createOwnerLogin() {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBackground(Color.WHITE);
@@ -318,8 +318,7 @@ public class MainControl extends JFrame {
         idLabel.setHorizontalAlignment(SwingConstants.CENTER);
         idLabel.setPreferredSize(new Dimension(80, 30));
 
-        // 지역 변수로 선언
-        JPasswordField ownerIDField = new JPasswordField();
+        JTextField ownerIDField = new JTextField();
         ownerIDField.setPreferredSize(new Dimension(250, 30));
         ownerIDField.setBackground(new Color(227, 232, 239));
 
@@ -330,7 +329,6 @@ public class MainControl extends JFrame {
         passwordLabel.setHorizontalAlignment(SwingConstants.CENTER);
         passwordLabel.setPreferredSize(new Dimension(80, 30));
 
-        // 지역 변수로 선언
         JPasswordField ownerPWField = new JPasswordField();
         ownerPWField.setPreferredSize(new Dimension(250, 30));
         ownerPWField.setBackground(new Color(227, 232, 239));
@@ -365,7 +363,7 @@ public class MainControl extends JFrame {
         confirmButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String inputID = new String(ownerIDField.getPassword());
+                String inputID = new String(ownerIDField.getText().trim());
                 String inputPWStr = new String(ownerPWField.getPassword());
 
                 if (inputID.isEmpty() || inputPWStr.isEmpty()) {

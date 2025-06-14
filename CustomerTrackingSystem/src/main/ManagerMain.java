@@ -10,6 +10,7 @@ public class ManagerMain extends JFrame {
     private Server server;
     private JPanel mainPanel; // 주 패널
     private CardLayout cardLayout; // 패널 전환을 위한 레이아웃
+    private DefaultListModel<String> listModel; // 점주 리스트 출력 기능을 위한 동적 리스트
     private Owner statsOwner; // 통계를 보기 위해 선택된 오너
 
     //패널 식별자 변수
@@ -196,9 +197,6 @@ public class ManagerMain extends JFrame {
                 String id = idField.getText().trim();
                 String pwText = new String(passwordField.getPassword()).trim();
 
-                //return 값이 false라면 해당 ID를 가진 점주가 이미 존재합니다
-                //비밀번호가 6자리 이상의 숫자인지만 확인 -> 아니라면 비밀번호는 6자리 이상이어야 합니다 출력
-
                 if (id.isEmpty() || pwText.isEmpty()) {
                     return;
                 }
@@ -219,6 +217,7 @@ public class ManagerMain extends JFrame {
                     // 서버에 추가
                     if (server != null) {
                         if (server.addOwner(id, pw)) {
+                            updateOwnerList(); // 리스트 실시간 업데이트
                             JOptionPane.showMessageDialog(ManagerMain.this, "점주가 성공적으로 추가되었습니다.", "성공", JOptionPane.INFORMATION_MESSAGE);
                             idField.setText("");
                             passwordField.setText("");
@@ -291,9 +290,10 @@ public class ManagerMain extends JFrame {
                 return;
             }
 
-            if (server.delOwner(inputID))
+            if (server.delOwner(inputID)) {
+                updateOwnerList(); // 리스트 실시간 업데이트
                 JOptionPane.showMessageDialog(this, "해당 점주가 삭제되었습니다.", "성공", JOptionPane.INFORMATION_MESSAGE);
-            else
+            } else
                 JOptionPane.showMessageDialog(this, "입력한 아이디를 가진 점주가 존재하지 않습니다", "오류", JOptionPane.WARNING_MESSAGE);
 
             idField.setText(""); // 입력창 초기화
@@ -303,6 +303,15 @@ public class ManagerMain extends JFrame {
         panel.add(buttonPanel, BorderLayout.SOUTH);
 
         return panel;
+    }
+
+    //점주 리스트 패널을 위한 리스트 백업 함수
+    private void updateOwnerList() {
+        listModel.clear();
+        ArrayList<String> ownerNameList = server.getOwnerIDs();
+        for (String ownerName : ownerNameList) {
+            listModel.addElement(ownerName);
+        }
     }
 
     //점주 리스트 패널을 생성하는 메소드
@@ -316,12 +325,17 @@ public class ManagerMain extends JFrame {
         titleLabel.setBorder(BorderFactory.createEmptyBorder(30, 0, 20, 0));
         panel.add(titleLabel, BorderLayout.NORTH);
 
-        // 중앙 패널에 스크롤이 가능한 리스트를 추가
-        ArrayList<String> ownerNameList = server.getOwnerIDs(); // Server 클래스에서 받아온 arraylist
-        String[] ownerNames = ownerNameList.toArray(new String[0]); // 배열 타입으로 변환
-        JList<String> ownerIDList = new JList<>(ownerNames);
+        // 중앙에 scrollPane 추가
+        listModel = new DefaultListModel<>(); // 모델 초기화
+        ArrayList<String> ownerNameList = server.getOwnerIDs();
+        for (String ownerName : ownerNameList) {
+            listModel.addElement(ownerName);
+        }
+
+        // JList에 모델 연결
+        JList<String> ownerIDList = new JList<>(listModel);
         ownerIDList.setFont(new Font("맑은 고딕", Font.PLAIN, 16));
-        ownerIDList.setEnabled(false);  // 읽기 전용
+        ownerIDList.setEnabled(false);
 
         JScrollPane scrollPane = new JScrollPane(ownerIDList);
         scrollPane.setPreferredSize(new Dimension(250, 200));
