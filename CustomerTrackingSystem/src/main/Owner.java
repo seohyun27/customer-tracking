@@ -12,7 +12,6 @@ public class Owner extends User{
     + getCustInfo(): ArrayList<String> : 자신이 저장한 고객들의 모든 고객정보를 문자열 리스트 가져오기
     */
 
-
     public Owner(String ID, int PW){
         this.ID = ID;
         this.PW = PW;
@@ -78,6 +77,7 @@ public class Owner extends User{
 
     //자신이 저장한 고객들의 모든 고객정보를 문자열 리스트 가져오기
     //(가져온 Integer 정보를 한글로 바꾸는 수정 필요)
+    /*
     public ArrayList<String> getCustInfo() {
         ArrayList<String> infoList = new ArrayList<>();
         for (Customer c : customerList) {
@@ -94,4 +94,5 @@ public class Owner extends User{
         }
         return infoList;
     }
+     */
 }

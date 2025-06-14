@@ -2,6 +2,8 @@ package main;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class OwnerMain extends JFrame {
     private Server server;
@@ -126,8 +128,6 @@ public class OwnerMain extends JFrame {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
 
-        String[] options = { " ", "option1" };
-
         // 성별 콤보박스
         JLabel genLabel = new JLabel("성별");
         genLabel.setOpaque(true);
@@ -144,7 +144,7 @@ public class OwnerMain extends JFrame {
         ageLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 16));
         ageLabel.setHorizontalAlignment(SwingConstants.CENTER);
         ageLabel.setPreferredSize(new Dimension(120, 30));
-        JComboBox<String> ageComboBox = new JComboBox<>(options);
+        JComboBox<String> ageComboBox = new JComboBox<>(new String[]{" ", "20대 이하", "20대", "30대", "40대", "50대", "60대", "70대", "80대 이상"});
         ageComboBox.setPreferredSize(new Dimension(250, 30));
         ageComboBox.setBackground(new Color(227, 232, 239));
 
@@ -154,9 +154,9 @@ public class OwnerMain extends JFrame {
         entryTimeLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 16));
         entryTimeLabel.setHorizontalAlignment(SwingConstants.CENTER);
         entryTimeLabel.setPreferredSize(new Dimension(120, 30));
-        JComboBox<String> entryTimeComboBox = new JComboBox<>(options);
-        entryTimeComboBox.setPreferredSize(new Dimension(250, 30));
-        entryTimeComboBox.setBackground(new Color(227, 232, 239));
+        JComboBox<String> visitRangeComboBox = new JComboBox<>(new String[]{" ", "10시", "11시", "12시", "13시", "14시", "15시", "16시", "17시", "18시", "19시", "20시"});
+        visitRangeComboBox.setPreferredSize(new Dimension(250, 30));
+        visitRangeComboBox.setBackground(new Color(227, 232, 239));
 
         // 머문 시간 콤보박스
         JLabel stayTimeLabel = new JLabel("머문 시간");
@@ -164,7 +164,7 @@ public class OwnerMain extends JFrame {
         stayTimeLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 16));
         stayTimeLabel.setHorizontalAlignment(SwingConstants.CENTER);
         stayTimeLabel.setPreferredSize(new Dimension(120, 30));
-        JComboBox<String> stayTimeComboBox = new JComboBox<>(options);
+        JComboBox<String> stayTimeComboBox = new JComboBox<>(new String[]{" ", "30분 이하", "30분", "1시간", "1시간 30분", "2시간", "2시간 30분", "3시간", "3시간 이상"});
         stayTimeComboBox.setPreferredSize(new Dimension(250, 30));
         stayTimeComboBox.setBackground(new Color(227, 232, 239));
 
@@ -174,9 +174,9 @@ public class OwnerMain extends JFrame {
         totalPriceRangeLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 16));
         totalPriceRangeLabel.setHorizontalAlignment(SwingConstants.CENTER);
         totalPriceRangeLabel.setPreferredSize(new Dimension(120, 30));
-        JComboBox<String> totalPriceRangeComboBox = new JComboBox<>(options);
-        totalPriceRangeComboBox.setPreferredSize(new Dimension(250, 30));
-        totalPriceRangeComboBox.setBackground(new Color(227, 232, 239));
+        JComboBox<String> totalPriceComboBox = new JComboBox<>(new String[]{" ", "20만원 이하", "20만원", "40만원", "60만원", "80만원", "100만원", "100만원 이상"});
+        totalPriceComboBox.setPreferredSize(new Dimension(250, 30));
+        totalPriceComboBox.setBackground(new Color(227, 232, 239));
 
         // 항목별 라벨과 콤보박스 배치
         // 성별
@@ -198,7 +198,7 @@ public class OwnerMain extends JFrame {
         gbc.gridy = 2;
         inputPanel.add(entryTimeLabel, gbc);
         gbc.gridx = 1;
-        inputPanel.add(entryTimeComboBox, gbc);
+        inputPanel.add(visitRangeComboBox, gbc);
 
         // 머문 시간
         gbc.gridx = 0;
@@ -212,7 +212,7 @@ public class OwnerMain extends JFrame {
         gbc.gridy = 4;
         inputPanel.add(totalPriceRangeLabel, gbc);
         gbc.gridx = 1;
-        inputPanel.add(totalPriceRangeComboBox, gbc);
+        inputPanel.add(totalPriceComboBox, gbc);
 
         panel.add(inputPanel, BorderLayout.CENTER);
 
@@ -222,6 +222,42 @@ public class OwnerMain extends JFrame {
         JButton confirmButton = new JButton("완료");
         confirmButton.setBackground(new Color(189, 204, 227));
         confirmButton.setPreferredSize(new Dimension(70, 30));
+
+        confirmButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // 각 콤보박스의 값을 가져온다
+                String gender_s = (String) genComboBox.getSelectedItem();
+                String age_s = (String) ageComboBox.getSelectedItem();
+                String visitRange_s = (String) visitRangeComboBox.getSelectedItem();
+                String stayTime_s = (String) stayTimeComboBox.getSelectedItem();
+                String totalPrice_s = (String) totalPriceComboBox.getSelectedItem();
+
+                // 하나라도 값이 입력되어 있지 않다면
+                if (gender_s.equals(" ") || age_s.equals(" ") || visitRange_s.equals(" ") ||
+                        stayTime_s.equals(" ") || totalPrice_s.equals(" ")) {
+                    return;
+                }
+
+                Translation translation = new Translation(); // 번역 클래스 생성
+
+                int gender = translation.getIntGender(gender_s);
+                int age = translation.getIntAgeRange(age_s);
+                int visitRange = translation.getIntVisitRange(visitRange_s);
+                int stayTime = translation.getIntStayTime(stayTime_s);
+                int totalPrice = translation.getIntTotalPrice(totalPrice_s);
+
+                owner.addCust(gender, age, visitRange, stayTime, totalPrice);
+                JOptionPane.showMessageDialog(OwnerMain.this, "고객의 정보가 성공적으로 추가되었습니다.", "성공", JOptionPane.INFORMATION_MESSAGE);
+
+                genComboBox.setSelectedIndex(0); // 모든 Combobox를 초기값으로 되돌리기
+                ageComboBox.setSelectedIndex(0);
+                visitRangeComboBox.setSelectedIndex(0);
+                stayTimeComboBox.setSelectedIndex(0);
+                totalPriceComboBox.setSelectedIndex(0);
+            }
+        });
+
         buttonPanel.add(confirmButton);
         panel.add(buttonPanel, BorderLayout.SOUTH);
 

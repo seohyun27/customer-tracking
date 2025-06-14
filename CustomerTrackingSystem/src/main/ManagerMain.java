@@ -467,15 +467,4 @@ public class ManagerMain extends JFrame {
 
         return panel;
     }
-
-    /*
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new ManagerMain();
-            }
-        });
-    }
-    */
 }
