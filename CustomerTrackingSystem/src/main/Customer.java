@@ -10,7 +10,7 @@ public class Customer {
     public static int CID_NUM = 0; //전체 고객의 인스턴스의 개수
 
     public Customer(int gender, int ageRange, int visitRange, int stayTime, int totalPrice) {
-        this.CID = ++CID_NUM;
+        this.CID = ++CID_NUM; //몇 번째로 추가 고객인지를 표시
         this.gender = gender;
         this.ageRange = ageRange;
         this.visitRange = visitRange;
@@ -41,10 +41,4 @@ public class Customer {
     public int getTotalPrice() {
         return totalPrice;
     }
-
-
-
-    //===========이쪽 내용은 Owner 클래스의 getCustInfo() 함수 안으로 이동================
-    // 그냥 사용 or 필요하다면 private 함수로 만들기
-
 }

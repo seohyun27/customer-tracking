@@ -165,7 +165,7 @@ public class ManagerMain extends JFrame {
         passwordField.setPreferredSize(new Dimension(250, 30));
         passwordField.setBackground(new Color(227, 232, 239));
 
-        // 아이디 필드 추가 (첫 번째 행)
+        // 아이디 필드 추가
         gbc.gridx = 0;
         gbc.gridy = 0;
         inputPanel.add(idLabel, gbc);
@@ -173,7 +173,7 @@ public class ManagerMain extends JFrame {
         gbc.gridx = 1;
         inputPanel.add(idField, gbc);
 
-        // 비밀번호 필드 추가 (두 번째 행)
+        // 비밀번호 필드 추가
         gbc.gridx = 0;
         gbc.gridy = 1;
         inputPanel.add(passwordLabel, gbc);
@@ -217,7 +217,7 @@ public class ManagerMain extends JFrame {
                     // 서버에 추가
                     if (server != null) {
                         if (server.addOwner(id, pw)) {
-                            updateOwnerList(); // 리스트 실시간 업데이트
+                            updateOwnerList(); // 점주 리스트 실시간 업데이트
                             JOptionPane.showMessageDialog(ManagerMain.this, "점주가 성공적으로 추가되었습니다.", "성공", JOptionPane.INFORMATION_MESSAGE);
                             idField.setText("");
                             passwordField.setText("");
@@ -237,7 +237,7 @@ public class ManagerMain extends JFrame {
         return panel;
     }
 
-    //점주 삭제 패널을 생성하는 메소드
+    // 점주 삭제 패널을 생성하는 메소드
     public JPanel createDelPanel() {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBackground(Color.WHITE);
@@ -283,7 +283,7 @@ public class ManagerMain extends JFrame {
         confirmButton.setBackground(new Color(189, 204, 227));
         confirmButton.setPreferredSize(new Dimension(70, 30));
 
-        confirmButton.addActionListener(e -> { //삭제할 점주의 ID를 입력한 뒤 "완료"를 클릭
+        confirmButton.addActionListener(e -> {
             String inputID = idField.getText().trim();
 
             if (inputID.isEmpty()) {
@@ -422,7 +422,7 @@ public class ManagerMain extends JFrame {
     }
 
 
-    // 아직 구현되지 않은 기능
+    // 아직 구현되지 않은 기능 (UI만 존재)
     // 점주별 통계 패널을 생성하는 메소드
     public JPanel createStatsPanel() {
         // 메인 패널: BorderLayout을 사용하여 상단과 중앙을 나눕니다.
@@ -462,7 +462,6 @@ public class ManagerMain extends JFrame {
         centerGroupPanel.add(comp2);
         centerGroupPanel.add(comp3);
 
-        // 화면을 채우기 위해 BorderLayout.CENTER에 추가
         panel.add(centerGroupPanel, BorderLayout.CENTER);
 
         return panel;

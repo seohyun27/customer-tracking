@@ -1,16 +1,39 @@
 package main;
 
+import org.jfree.chart.JFreeChart;
 import java.awt.*;
 
 public class Statistics {
-    Owner owner;
+    private Owner owner;
+    private String criteria;
 
-    Statistics(Owner owenr){
-        this.owner = owenr;
+    private JFreeChart ageChart;
+    private JFreeChart visitChart;
+    private JFreeChart timeChart;
+    private JFreeChart priceChart;
+
+    Statistics(Owner owner, String criteria){
+        this.owner = owner;
+        this.criteria = criteria;
     }
 
-    public Image getChartImage(){
+    public JFreeChart creatAgeChart(){
         return null;
     }
 
+    public JFreeChart creatVisitChart(){
+        return null;
+    }
+
+    public JFreeChart creatTimeChart(){
+        return null;
+    }
+
+    public JFreeChart creatPriceChart(){
+        return null;
+    }
+
+    public Image getChartImage(JFreeChart chart){
+        return null;
+    }
 }

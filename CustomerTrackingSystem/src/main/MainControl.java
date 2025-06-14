@@ -52,8 +52,8 @@ public class MainControl extends JFrame {
         setVisible(true);
     }
 
-    // 매니저 비밀번호 초기화 후의 로그인 기능을 구현
-    public MainControl(Server server) { //생성자
+    // 매니저 비밀번호 초기화 후의 로그인 화면을 구현
+    public MainControl(Server server) { //Server를 인자로 받는 생성자
         this.server = server;
 
         setTitle("로그인");
@@ -148,12 +148,10 @@ public class MainControl extends JFrame {
                         // 로그인 화면으로 전환
                         setTitle("로그인");
                         cardLayout.show(mainPanel, LOGIN_PANEL);
-                    } catch (NumberFormatException ex) {
-                        // 숫자로 변환 실패 시 처리 (예: 비밀번호에 숫자가 아닌 문자 포함)
+                    } catch (NumberFormatException ex) { // 숫자로 변환 실패 시
                         JOptionPane.showMessageDialog(MainControl.this, "비밀번호는 숫자만 입력해주세요.", "오류", JOptionPane.ERROR_MESSAGE);
                     }
-                } else {
-                    // 6자리 미만일 때 메시지 출력
+                } else { // 변환된 숫자가 6자리 미만일 시
                     JOptionPane.showMessageDialog(MainControl.this, "비밀번호는 6자리 이상으로 입력해주세요.", "경고", JOptionPane.WARNING_MESSAGE);
                 }
             }
@@ -186,10 +184,8 @@ public class MainControl extends JFrame {
         managerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
-                // 매니저 로그인 패널로 전환
                 setTitle("매니저 로그인");
-                cardLayout.show(mainPanel, M_LOGIN_PANEL);
+                cardLayout.show(mainPanel, M_LOGIN_PANEL); // 매니저 로그인 패널로 전환
             }
         });
 
@@ -202,10 +198,8 @@ public class MainControl extends JFrame {
         ownerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
-                // 점주 로그인 패널로 전환
                 setTitle("점주 로그인");
-                cardLayout.show(mainPanel, O_LOGIN_PANEL);
+                cardLayout.show(mainPanel, O_LOGIN_PANEL); // 점주 로그인 패널로 전환
             }
         });
 
@@ -269,7 +263,6 @@ public class MainControl extends JFrame {
         confirmButton.setBackground(new Color(189, 204, 227));
         confirmButton.setPreferredSize(new Dimension(70, 30));
 
-        // 버튼 액션 - 지역 변수 접근 가능
         confirmButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -359,7 +352,6 @@ public class MainControl extends JFrame {
         confirmButton.setBackground(new Color(189, 204, 227));
         confirmButton.setPreferredSize(new Dimension(70, 30));
 
-        // 버튼 액션 - 지역 변수 접근 가능
         confirmButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

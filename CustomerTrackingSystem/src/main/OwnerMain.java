@@ -228,7 +228,7 @@ public class OwnerMain extends JFrame {
         confirmButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // 각 콤보박스의 값을 가져온다
+                // 각 콤보박스의 값을 가져오기
                 String gender_s = (String) genComboBox.getSelectedItem();
                 String age_s = (String) ageComboBox.getSelectedItem();
                 String visitRange_s = (String) visitRangeComboBox.getSelectedItem();
@@ -243,7 +243,7 @@ public class OwnerMain extends JFrame {
 
                 Translation translation = new Translation(); // 번역 클래스 생성
 
-                int gender = translation.getIntGender(gender_s);
+                int gender = translation.getIntGender(gender_s); //입력받은 문자열을 숫자로 변환
                 int age = translation.getIntAgeRange(age_s);
                 int visitRange = translation.getIntVisitRange(visitRange_s);
                 int stayTime = translation.getIntStayTime(stayTime_s);
@@ -313,13 +313,14 @@ public class OwnerMain extends JFrame {
         return panel;
     }
 
-    //통계 패널을 생성하는 메소드
+    // 아직 구현되지 않은 기능 (UI만 존재)
+    // 점주별 통계 패널을 생성하는 메소드
     public JPanel createStatsPanel() {
-        // 메인 패널: BorderLayout을 사용하여 상단과 중앙을 나눕니다.
+        // 메인 패널
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBackground(Color.WHITE);
 
-        // 상단 패널 (JComboBox 하나만 왼쪽에 배치)
+        // 상단 패널
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 10));
         topPanel.setBackground(Color.WHITE);
 
@@ -328,7 +329,7 @@ public class OwnerMain extends JFrame {
         topPanel.add(comboBox);
         panel.add(topPanel, BorderLayout.NORTH);
 
-        // 중앙 그룹 패널 (3개의 컴포넌트가 화면을 가득 채우도록 설정)
+        // 중앙 그룹 패널
         JPanel centerGroupPanel = new JPanel(new GridLayout(1, 3, 10, 10));
         centerGroupPanel.setBackground(Color.WHITE);
 
@@ -352,19 +353,8 @@ public class OwnerMain extends JFrame {
         centerGroupPanel.add(comp2);
         centerGroupPanel.add(comp3);
 
-        // 화면을 채우기 위해 BorderLayout.CENTER에 추가
         panel.add(centerGroupPanel, BorderLayout.CENTER);
 
         return panel;
     }
-
-    /*
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new OwnerMain();
-            }
-        });
-    }*/
 }

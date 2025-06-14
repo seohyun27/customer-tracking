@@ -5,12 +5,6 @@ import java.util.ArrayList;
 public class Owner extends User{
     private String ID;
     private ArrayList<Customer> customerList;
-    private Statistics statistics;
-
-    /*
-    + addCust(custInfo: CustInfo) : boolean : 새로운 고객 추가하기
-    + getCustInfo(): ArrayList<String> : 자신이 저장한 고객들의 모든 고객정보를 문자열 리스트 가져오기
-    */
 
     public Owner(String ID, int PW){
         this.ID = ID;
@@ -75,8 +69,7 @@ public class Owner extends User{
         return priceList;
     }
 
-    //자신이 저장한 고객들의 모든 고객정보를 문자열 리스트 가져오기
-    //(가져온 Integer 정보를 한글로 바꾸는 수정 필요)
+    //자신이 저장한 고객들의 모든 고객정보 담은 문자열 리스트를 반환
     public ArrayList<String> getCustInfo() {
         ArrayList<String> infoList = new ArrayList<>();
         Translation translation = new Translation(); // 번역 클래스 생성

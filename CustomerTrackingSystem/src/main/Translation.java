@@ -1,6 +1,6 @@
 package main;
 
-//Customer의 값을 번역하기 위해 존재하는 번역 클래스
+//Customer의 정보를 String에서 int로, int에서 String으로 번역하기 위해 존재하는 번역 클래스
 
 public class Translation {
     public int getIntGender(String gender) {
