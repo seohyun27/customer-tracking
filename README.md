@@ -5,13 +5,25 @@ Customer Tracking system is designed to support shop operations. It collects inf
 
 ### Contents
 - Conceptualization Report File
+  - System context diagram
 - Analysis Report File
+  - Use case diagram
+  - User Interface prototype
 - Design Report File
+  - Class diagram
+  - Sequence diagram
+  - State machine diagram
 - Program Code
+  - Source files : CustomerTrackingSystem/src/main
+  - Library files : lib
 
 
-### Useing program
+### How to Run
 - Run the program from the MainControl class.
-- To run the program, make sure to include the jar files in the lib directory in the classpath.
-- For usage instructions after running the program, refer to the 'User Interface prototype' in the [Analysis] file.
+- Ensure the jar files in the lib directory are included in the classpath.
 
+
+### Development Environment
+- Language: Java
+- IDE: IntelliJ
+- JDK Version: 21.0.6
