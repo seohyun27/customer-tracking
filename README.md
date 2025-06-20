@@ -3,7 +3,7 @@ This repository is for the 'Open Source SW Design' project.
 Customer Tracking system is designed to support shop operations. It collects information about visitors and provides it to users in their preferred format whenever needed. This system helps shop owners manage their business and customers more effectively, ultimately aiming to increase revenue.
 
 
-### Contents
+## Contents
 - Conceptualization Report File
   - System context diagram
 - Analysis Report File
@@ -18,12 +18,12 @@ Customer Tracking system is designed to support shop operations. It collects inf
   - Library files : lib
 
 
-### How to Run
+## How to Run
 - Run the program from the MainControl class.
 - Ensure the jar files in the lib directory are included in the classpath.
 
 
-### Development Environment
+## Development Environment
 - Language: Java
 - IDE: IntelliJ
 - JDK Version: 21.0.6
