@@ -1,5 +1,5 @@
 # 📊 Customer Tracking System
-> 오픈소스 SW 설계(3-1) 수업에서 진행한 프로젝트입니다.<br/>
+> 오픈소스 SW 설계 수업에서 진행한 프로젝트입니다.<br/>
 > 매장 운영을 돕기 위한 **고객 추적 및 관리 시스템**으로 방문자 정보를 수집하여 통계를 제공하고 매출 증대를 돕는 것을 목표로 설계되었습니다.
 
 ## 💡 Project Highlight: Architectural Discovery
