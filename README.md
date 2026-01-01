@@ -36,7 +36,7 @@ SW 설계 프로세스에 따라 작성된 산출물입니다.
 - **Library files**: `lib`
 
 ### 🎥 Demo Video
-- **실행 영상 보기**: [구글 드라이브 링크](여기에_구글_드라이브_공유_링크_입력)
+- **실행 영상 보기**: [구글 드라이브 링크](https://drive.google.com/file/d/1G7gNC6YPThfDiN8dcv6-2BeIRPUZd_cQ/view?usp=drive_link)
 
 ## 🚀 How to Run
 1. **Environment**: JDK 21.0.6, IntelliJ IDEA
