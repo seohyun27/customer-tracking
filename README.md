@@ -18,6 +18,10 @@
 - **데이터 최적화 및 통계 설계 (Data Modeling)**
   - `Translation.java`: 고객 정보를 효율적으로 저장하고 통계 그래프를 그리기 위해 문자열(String) 데이터를 숫자(int) 코드로 변환/매핑하는 번역 클래스를 설계했습니다. (DB의 인덱싱/Enum 매핑과 유사한 접근)
 
+ - **순수 자바 라우팅의 한계와 프레임워크의 필요성 체감 (Retrospective)**
+  - `MainControl.java`에서 모든 화면 전환과 클라이언트 요청을 직접 분기 처리하다 보니, 기능이 추가될수록 컨트롤러가 비대해지고 객체 간 결합도가 급격히 높아지는 문제(Routing Complexity)에 직면했습니다.
+  - 이 뼈아픈 경험은 이후 Spring Boot 생태계에 입문했을 때, 프레임워크가 제공하는 **`DispatcherServlet`의 중앙 집중식 요청 처리**와 **제어의 역전(IoC)**이 얼마나 우아하고 혁신적인 아키텍처인지 깊이 통감하고 흡수하게 해 준 최고의 자양분이 되었습니다.
+
 ## 🛠 Tech Stack
 ![Java](https://img.shields.io/badge/Java-007396?style=flat&logo=openjdk&logoColor=white) 
 ![Java Swing](https://img.shields.io/badge/Java%20Swing-E76F00?style=flat&logo=java&logoColor=white) 
